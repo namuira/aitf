@@ -6,8 +6,13 @@ import { CustomButton, AuthSession, CloudflareBindings } from './types'
 
 const app = new Hono<{ Bindings: CloudflareBindings }>()
 
-// Enable CORS for API routes
-app.use('/api/*', cors())
+// Enable CORS for API routes (allow all origins for GitHub Pages compatibility)
+app.use('/api/*', cors({
+  origin: '*',
+  credentials: false,
+  methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Accept', 'Authorization']
+}))
 
 // Serve static files
 app.use('/static/*', serveStatic({ root: './public' }))
