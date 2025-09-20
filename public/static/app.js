@@ -331,11 +331,11 @@ async function logout() {
     document.cookie = 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     
     // Redirect to login
-    window.location.href = '/';
+    window.location.href = '/login';
   } catch (error) {
     console.error('Logout error:', error);
     // Force redirect even if API call fails
-    window.location.href = '/';
+    window.location.href = '/login';
   }
 }
 
