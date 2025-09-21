@@ -196,6 +196,13 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <script type="module">
+        // Typebot 라이브러리를 동적으로 로드
+        window.loadTypebot = async function(apiHost) {
+            const { default: Typebot } = await import('https://cdn.jsdelivr.net/npm/@typebot.io/js@0/dist/web.js');
+            return Typebot;
+        };
+    </script>
     <script>
         // Configuration
         let serverUrl = localStorage.getItem('dashboardServerUrl') || 'https://3000-i3ixrw2hugdlbs9khnsxi-6532622b.e2b.dev';
@@ -259,6 +266,8 @@
                         type: button.type,
                         url: button.url,
                         htmlContent: button.htmlContent,
+                        typebotId: button.typebotId,
+                        apiHost: button.apiHost,
                         description: button.description
                     });
                 });
@@ -310,12 +319,16 @@
                         `<p class="text-xs text-gray-500 mt-1">${agent.description}</p>` : 
                         ''
                     }
+                    ${agent.custom && agent.type === 'typebot' ? 
+                        `<span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full mt-1 inline-block">Typebot</span>` : 
+                        ''
+                    }
                 </div>
             `;
         }
 
         // Handle agent click
-        function handleAgentClick(agent) {
+        async function handleAgentClick(agent) {
             if (agent.custom) {
                 // Handle custom agents
                 if (agent.type === 'link') {
@@ -323,6 +336,9 @@
                     showStatus(`${agent.title} 링크를 새 창에서 열었습니다.`, 'success');
                 } else if (agent.type === 'modal') {
                     showModal(agent.title, agent.htmlContent);
+                } else if (agent.type === 'typebot') {
+                    await initTypebot(agent.typebotId, agent.apiHost);
+                    showStatus(`${agent.title} Typebot 에이전트를 실행했습니다.`, 'success');
                 }
             } else {
                 // Handle default agents (placeholder functionality)
@@ -332,6 +348,26 @@
                 } else {
                     showStatus(`${agent.title} 클릭됨! (기본 에이전트)`, 'info');
                 }
+            }
+        }
+
+        // Initialize Typebot
+        async function initTypebot(typebotId, apiHost) {
+            try {
+                const Typebot = await window.loadTypebot();
+                
+                const config = { 
+                    typebot: typebotId 
+                };
+                
+                if (apiHost && apiHost.trim()) {
+                    config.apiHost = apiHost;
+                }
+                
+                Typebot.initPopup(config);
+            } catch (error) {
+                console.error('Typebot 로드 실패:', error);
+                showStatus('Typebot 에이전트 로드에 실패했습니다.', 'error');
             }
         }
 

@@ -524,6 +524,7 @@ app.get('/dashboard', authMiddleware, async (c) => {
                   >
                     <option value="link">링크</option>
                     <option value="modal">모달</option>
+                    <option value="typebot">Typebot 에이전트</option>
                   </select>
                 </div>
               </div>
@@ -556,6 +557,29 @@ app.get('/dashboard', authMiddleware, async (c) => {
                   className="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="모달에 표시할 HTML 내용을 입력하세요"
                 ></textarea>
+              </div>
+              
+              <div id="typebotField" style="display: none;">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-white text-sm font-medium mb-2">Typebot ID</label>
+                    <input
+                      type="text"
+                      id="typebotId"
+                      className="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="your-typebot-id"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-white text-sm font-medium mb-2">API Host (선택)</label>
+                    <input
+                      type="url"
+                      id="apiHost"
+                      className="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="https://bot.linkpingchat.xyz"
+                    />
+                  </div>
+                </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -705,6 +729,10 @@ app.post('/api/buttons', authMiddleware, async (c) => {
       return c.json({ error: '모달 타입에는 HTML 내용이 필요합니다.' }, 400)
     }
     
+    if (buttonData.type === 'typebot' && !buttonData.typebotId) {
+      return c.json({ error: 'Typebot 타입에는 Typebot ID가 필요합니다.' }, 400)
+    }
+    
     // Get existing buttons
     const existingButtons: CustomButton[] = await c.env.WEBAPP_KV.get('custom_buttons', 'json') || []
     
@@ -716,6 +744,8 @@ app.post('/api/buttons', authMiddleware, async (c) => {
       type: buttonData.type,
       url: buttonData.url || '',
       htmlContent: buttonData.htmlContent || '',
+      typebotId: buttonData.typebotId || '',
+      apiHost: buttonData.apiHost || '',
       icon: buttonData.icon || 'fas fa-star',
       color: buttonData.color || 'purple',
       createdAt: new Date().toISOString()

@@ -113,19 +113,28 @@ function initializeDashboard() {
 function toggleFormFields(type) {
   const urlField = document.getElementById('urlField');
   const htmlField = document.getElementById('htmlField');
+  const typebotField = document.getElementById('typebotField');
   const buttonUrl = document.getElementById('buttonUrl');
   const buttonHtml = document.getElementById('buttonHtml');
+  const typebotId = document.getElementById('typebotId');
+  
+  // Hide all fields first
+  urlField.style.display = 'none';
+  htmlField.style.display = 'none';
+  typebotField.style.display = 'none';
+  buttonUrl.required = false;
+  buttonHtml.required = false;
+  typebotId.required = false;
   
   if (type === 'link') {
     urlField.style.display = 'block';
-    htmlField.style.display = 'none';
     buttonUrl.required = true;
-    buttonHtml.required = false;
-  } else {
-    urlField.style.display = 'none';
+  } else if (type === 'modal') {
     htmlField.style.display = 'block';
-    buttonUrl.required = false;
     buttonHtml.required = true;
+  } else if (type === 'typebot') {
+    typebotField.style.display = 'block';
+    typebotId.required = true;
   }
 }
 
@@ -256,6 +265,8 @@ async function addNewButton() {
   const description = document.getElementById('buttonDescription').value;
   const url = document.getElementById('buttonUrl').value;
   const htmlContent = document.getElementById('buttonHtml').value;
+  const typebotId = document.getElementById('typebotId').value;
+  const apiHost = document.getElementById('apiHost').value;
   const icon = document.getElementById('buttonIcon').value;
   const color = document.getElementById('buttonColor').value;
   
@@ -277,8 +288,11 @@ async function addNewButton() {
     
     if (type === 'link') {
       buttonData.url = url;
-    } else {
+    } else if (type === 'modal') {
       buttonData.htmlContent = htmlContent;
+    } else if (type === 'typebot') {
+      buttonData.typebotId = typebotId;
+      buttonData.apiHost = apiHost;
     }
     
     const response = await axios.post('/api/buttons', buttonData);
