@@ -166,8 +166,8 @@
                             type="url"
                             id="serverUrl"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                            placeholder="https://your-dashboard-server.com"
-                            value="https://3000-i3ixrw2hugdlbs9khnsxi-6532622b.e2b.dev"
+                            placeholder="http://YOUR_PC_IP:8080"
+                            value="http://localhost:8080"
                         >
                     </div>
                     <div class="flex space-x-3">
@@ -205,7 +205,7 @@
     </script>
     <script>
         // Configuration
-        let serverUrl = localStorage.getItem('dashboardServerUrl') || 'https://3000-i3ixrw2hugdlbs9khnsxi-6532622b.e2b.dev';
+        let serverUrl = localStorage.getItem('dashboardServerUrl') || 'http://localhost:8080';
         
         // Default agents configuration
         const defaultAgents = [

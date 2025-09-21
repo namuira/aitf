@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent 3 - 크리에이티브 | CCQE AX Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .agent-container { background: linear-gradient(135deg, #ffd3a5 0%, #fd9853 100%); min-height: 100vh; }
+        .agent-icon { background: linear-gradient(135deg, #ffd3a5, #fd9853); transition: all 0.3s ease; }
+        .agent-icon:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .management-btn { position: fixed; bottom: 2rem; right: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: all 0.3s ease; z-index: 1000; }
+        .management-btn:hover { transform: scale(1.1); }
+        .agents-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+    </style>
+</head>
+<body class="agent-container">
+    <div class="text-center py-8">
+        <div class="flex items-center justify-center mb-4">
+            <button onclick="goHome()" class="mr-4 text-white hover:text-gray-200"><i class="fas fa-arrow-left text-xl"></i></button>
+            <h1 class="text-4xl font-bold text-white">Agent 3 - 크리에이티브</h1>
+        </div>
+        <p class="text-white opacity-80">창작, 디자인, 아이디어 발굴을 지원하는 창의적 에이전트</p>
+    </div>
+    <div class="px-4 mb-16"><div class="agents-grid">
+        <div class="text-center cursor-pointer group" onclick="openLink('https://canva.com')">
+            <div class="agent-icon w-16 h-16 rounded-2xl flex items-center justify-center mb-3 mx-auto">
+                <i class="fas fa-palette text-xl text-white"></i>
+            </div>
+            <h3 class="text-sm font-medium text-white">Canva</h3>
+            <p class="text-xs text-white/70 mt-1">디자인 도구</p>
+        </div>
+        <div class="text-center cursor-pointer group" onclick="showModal('창의적 사고법', '<div class=\"p-6\"><h3 class=\"text-2xl font-bold mb-4\">창의력 향상 기법</h3><div class=\"space-y-4\"><div class=\"bg-yellow-50 p-4 rounded-lg\"><h4 class=\"font-bold text-yellow-800\">🧠 브레인스토밍</h4><p>모든 아이디어를 자유롭게 기록하고 나중에 평가하세요</p></div><div class=\"bg-pink-50 p-4 rounded-lg\"><h4 class=\"font-bold text-pink-800\">🔄 관점 전환</h4><p>다른 사람의 입장에서 문제를 바라보세요</p></div></div></div>')">
+            <div class="agent-icon w-16 h-16 rounded-2xl flex items-center justify-center mb-3 mx-auto">
+                <i class="fas fa-lightbulb text-xl text-white"></i>
+            </div>
+            <h3 class="text-sm font-medium text-white">창작 가이드</h3>
+        </div>
+    </div></div>
+    <a href="/agent/3/login" class="management-btn text-white"><i class="fas fa-cogs text-xl"></i></a>
+    <script>
+        function goHome() { window.location.href = '/'; }
+        function openLink(url) { window.open(url, '_blank'); }
+        function showModal(title, htmlContent) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = '<div class="bg-white rounded-2xl max-w-2xl w-full"><div class="flex justify-between items-center p-4 border-b"><h3 class="text-xl font-bold">' + title + '</h3><button onclick="this.closest(\'.fixed\').remove()" class="text-2xl">&times;</button></div>' + htmlContent + '</div>';
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

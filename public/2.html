@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent 2 - 지식 관리 | CCQE AX Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        
+        .agent-container {
+            background: linear-gradient(135deg, #a8e6cf 0%, #88d8ff 100%);
+            min-height: 100vh;
+        }
+        
+        .agent-icon { 
+            background: linear-gradient(135deg, #a8e6cf, #88d8ff); 
+            transition: all 0.3s ease; 
+        }
+        .agent-icon:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
+        
+        .management-btn { 
+            position: fixed; 
+            bottom: 2rem; 
+            right: 2rem; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            width: 60px; 
+            height: 60px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            transition: all 0.3s ease; 
+            z-index: 1000; 
+        }
+        .management-btn:hover { 
+            transform: scale(1.1); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
+        }
+        
+        .agents-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+            gap: 1.5rem; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+        
+        .modal-overlay { backdrop-filter: blur(4px); }
+    </style>
+</head>
+<body class="agent-container">
+    <div class="text-center py-8">
+        <div class="flex items-center justify-center mb-4">
+            <button onclick="goHome()" class="mr-4 text-white hover:text-gray-200 transition-colors">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </button>
+            <h1 class="text-4xl font-bold text-white">Agent 2 - 지식 관리</h1>
+        </div>
+        <p class="text-white opacity-80">문서, 자료, 지식 베이스를 체계적으로 관리하는 에이전트</p>
+    </div>
+    
+    <div class="max-w-2xl mx-auto px-4 mb-12">
+        <div class="relative">
+            <input type="text" placeholder="지식 검색, 문서 관리, 정보 정리를 도와드립니다" class="w-full px-6 py-4 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50">
+            <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
+                <button class="bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-colors"><i class="fas fa-search text-sm"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="px-4 mb-16">
+        <div id="agentsContainer" class="agents-grid">
+            <!-- 예시 링크 -->
+            <div class="text-center cursor-pointer group" onclick="openLink('https://notion.so')">
+                <div class="agent-icon w-16 h-16 rounded-2xl flex items-center justify-center mb-3 mx-auto">
+                    <i class="fas fa-file-alt text-xl text-white"></i>
+                </div>
+                <h3 class="text-sm font-medium text-white group-hover:text-gray-200 transition-colors">Notion</h3>
+                <p class="text-xs text-white/70 mt-1">통합 작업 공간</p>
+            </div>
+            
+            <!-- 예시 모달 -->
+            <div class="text-center cursor-pointer group" onclick="showModal('지식 관리 도구', '<div class=\\'p-6\\'><h3 class=\\'text-2xl font-bold mb-4 text-gray-800\\'>효과적인 지식 관리 방법</h3><div class=\\'grid md:grid-cols-2 gap-6\\'><div class=\\'bg-blue-50 p-4 rounded-lg\\'><h4 class=\\'font-semibold text-blue-800 mb-3\\'>📚 정보 수집</h4><ul class=\\'text-gray-700 space-y-2 text-sm\\'><li>• 신뢰할 수 있는 출처 확인</li><li>• 체계적인 분류 시스템 구축</li><li>• 정기적인 정보 업데이트</li></ul></div><div class=\\'bg-green-50 p-4 rounded-lg\\'><h4 class=\\'font-semibold text-green-800 mb-3\\'>🗂️ 문서 관리</h4><ul class=\\'text-gray-700 space-y-2 text-sm\\'><li>• 일관된 파일명 규칙</li><li>• 폴더 구조 표준화</li><li>• 버전 관리 시스템</li></ul></div><div class=\\'bg-purple-50 p-4 rounded-lg\\'><h4 class=\\'font-semibold text-purple-800 mb-3\\'>🔍 검색 최적화</h4><ul class=\\'text-gray-700 space-y-2 text-sm\\'><li>• 태그 시스템 활용</li><li>• 메타데이터 관리</li><li>• 전체 텍스트 검색</li></ul></div><div class=\\'bg-orange-50 p-4 rounded-lg\\'><h4 class=\\'font-semibold text-orange-800 mb-3\\'>🤝 공유 및 협업</h4><ul class=\\'text-gray-700 space-y-2 text-sm\\'><li>• 접근 권한 설정</li><li>• 실시간 공동 편집</li><li>• 변경 이력 추적</li></ul></div></div></div>')">
+                <div class="agent-icon w-16 h-16 rounded-2xl flex items-center justify-center mb-3 mx-auto">
+                    <i class="fas fa-brain text-xl text-white"></i>
+                </div>
+                <h3 class="text-sm font-medium text-white group-hover:text-gray-200 transition-colors">관리 가이드</h3>
+                <p class="text-xs text-white/70 mt-1">지식 체계화 방법</p>
+            </div>
+        </div>
+    </div>
+    
+    <a href="/agent/2/login" class="management-btn text-white hover:no-underline" title="Agent 2 관리">
+        <i class="fas fa-cogs text-xl"></i>
+    </a>
+    
+    <script>
+        function goHome() { window.location.href = '/'; }
+        function openLink(url) { window.open(url, '_blank'); }
+        
+        function showModal(title, htmlContent) {
+            const existingModal = document.querySelector('.modal-overlay');
+            if (existingModal) existingModal.remove();
+
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            
+            const modalContent = document.createElement('div');
+            modalContent.className = 'bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden';
+            modalContent.innerHTML = 
+                '<div class="flex justify-between items-center p-6 border-b border-gray-200 bg-gray-50">' +
+                    '<h3 class="text-xl font-semibold text-gray-800">' + title + '</h3>' +
+                    '<button class="modal-close text-gray-500 hover:text-gray-700 text-2xl"><i class="fas fa-times"></i></button>' +
+                '</div>' +
+                '<div class="overflow-y-auto max-h-[calc(90vh-120px)]">' + htmlContent + '</div>';
+            
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            
+            modal.querySelector('.modal-close').addEventListener('click', () => modal.remove());
+            modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+            document.addEventListener('keydown', function escHandler(e) {
+                if (e.key === 'Escape') { modal.remove(); document.removeEventListener('keydown', escHandler); }
+            });
+        }
+    </script>
+</body>
+</html>
