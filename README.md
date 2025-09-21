@@ -1,178 +1,179 @@
-# GenSpark 커스텀 에이전트 대시보드 🚀
+# CCQE AX Platform
 
-## 프로젝트 개요
-- **이름**: GenSpark 스타일 커스텀 에이전트 대시보드
-- **목표**: 사용자가 동적으로 버튼을 추가할 수 있는 GenSpark 스타일 대시보드
-- **주요 기능**: 
-  - 3가지 버튼 타입 지원 (링크, 모달, Typebot)
-  - 비밀번호 보호 관리 인터페이스
-  - GitHub Pages + PC 서버 하이브리드 아키텍처
-  - 실시간 동기화 (30초 간격)
+## 🌟 프로젝트 개요
+- **이름**: CCQE AX Platform
+- **목표**: 8개의 독립적인 AI 에이전트 시스템 플랫폼
+- **주요 기능**: 멀티 에이전트 관리, 독립적인 인증 시스템, 실시간 대시보드
 
-## 📡 배포 상태
-- **로컬 서버**: ✅ **활성** - http://localhost:8080
-- **API 엔드포인트**: ✅ **활성** - http://localhost:8080/api/*
-- **대시보드**: ✅ **활성** - http://localhost:8080/login (비밀번호: admin123)
-- **GitHub Pages**: 📋 **준비됨** - github-pages-index.html 파일 준비 완료
+## 🌐 접속 URL
+- **실시간 데모**: https://8080-i3ixrw2hugdlbs9khnsxi-6532622b.e2b.dev
+- **GitHub 저장소**: https://github.com/namuira/aitf
 
-## 🏗️ 아키텍처
+## 📥 다운로드 링크
 
-### 하이브리드 구조
-```
-GitHub Pages (정적 호스팅)    ←→    PC 서버 (Node.js Express)
-├── 메인 인터페이스                  ├── 관리 대시보드 (:8080/login)
-├── 기본 에이전트 표시               ├── API 서버 (:8080/api/*)
-├── 실시간 동기화 (30초)              ├── 버튼 데이터 관리
-└── Typebot 통합                    └── 세션 관리
-```
+### 🚀 완전한 프로젝트 다운로드
+**ZIP 다운로드**: [CCQE-AX-Platform-Complete.tar.gz](https://page.gensparksite.com/project_backups/tooluse_1B7cNps5QUqHbTTc7fClRw.tar.gz)
 
-### 데이터 아키텍처
-- **저장소**: 파일 기반 JSON (`data/buttons.json`)
-- **데이터 모델**: CustomButton 인터페이스
-- **세션 관리**: 메모리 기반 Map 구조 (개발용)
-- **CORS 설정**: `origin: '*'` (GitHub Pages 호환)
-
-```typescript
-interface CustomButton {
-  id: string;
-  title: string;
-  description?: string;
-  type: 'link' | 'modal' | 'typebot';
-  url?: string;           // link 타입용
-  htmlContent?: string;   // modal 타입용  
-  typebotId?: string;     // typebot 타입용
-  apiHost?: string;       // typebot 타입용 (선택)
-  icon?: string;          // FontAwesome 아이콘
-  color?: string;         // 파스텔 그래디언트 색상
-  createdAt: string;
-}
-```
-
-## 🎯 기능 명세
-
-### 현재 완료된 기능 ✅
-
-#### 1. PC 서버 (Node.js Express)
-- **포트**: 8080, 모든 인터페이스 바인딩 (`0.0.0.0`)
-- **메인 페이지**: GenSpark 스타일 UI (`/`)
-- **관리자 인터페이스**: 비밀번호 보호 (`/login`, `/dashboard`)
-- **API 엔드포인트**: RESTful API (`/api/*`)
-
-#### 2. 3가지 버튼 타입 완전 구현
-1. **링크 버튼** (`type: 'link'`)
-   - 외부 URL을 새 창에서 열기
-   - 필수: `url` 필드
-   
-2. **모달 버튼** (`type: 'modal'`)  
-   - HTML 콘텐츠를 팝업 모달로 표시
-   - 필수: `htmlContent` 필드
-   
-3. **Typebot 버튼** (`type: 'typebot'`)
-   - AI 챗봇 팝업 실행
-   - 필수: `typebotId` 필드
-   - 선택: `apiHost` 필드 (기본값 사용 가능)
-
-#### 3. 관리 시스템
-- **인증**: 세션 기반 (쿠키), 24시간 만료
-- **비밀번호**: `admin123` (하드코딩)
-- **CRUD 기능**: 버튼 생성, 조회, 삭제
-- **실시간 업데이트**: 변경사항 즉시 반영
-
-#### 4. GitHub Pages 통합
-- **파일**: `github-pages-index.html` 준비 완료
-- **CORS 해결**: Express 서버에서 `origin: '*'` 설정
-- **실시간 동기화**: 30초마다 API 호출
-- **설정 UI**: 서버 URL 동적 변경 가능
-
-#### 5. ARM64 Windows 호환성
-- **문제 해결**: Cloudflare Workers `workerd` 패키지 호환성 문제 우회
-- **솔루션**: 순수 Node.js Express 서버로 대체
-- **의존성**: `express`, `cors`, `uuid` (최소 의존성)
-
-### 현재 테스트 결과 ✅
-```json
-{
-  "server_status": "✅ 실행 중 (localhost:8080)",
-  "api_status": "✅ 정상 (CORS 설정 완료)",
-  "authentication": "✅ 정상 (세션 기반)",
-  "button_crud": "✅ 정상 (추가/조회/삭제)",
-  "data_persistence": "✅ 정상 (파일 저장)",
-  "test_button": {
-    "id": "dbd1092d-0208-4eee-8926-b321fea7e74d",
-    "title": "테스트 링크",
-    "type": "link",
-    "url": "https://www.google.com"
-  }
-}
-```
-
-## 🚀 사용 가이드
-
-### PC에서 서버 실행
+### 🔧 GitHub에서 클론
 ```bash
-# 1. ARM64 Windows 호환 의존성 사용
-cp package-windows.json package.json
+git clone https://github.com/namuira/aitf.git
+cd aitf
 npm install
-
-# 2. 서버 시작
-npm start
-# 또는
 node server.js
 ```
 
-### 대시보드 접근
-1. **로그인**: http://localhost:8080/login
-2. **비밀번호**: `admin123`
-3. **버튼 관리**: 추가/삭제 인터페이스
+## 🏗️ 시스템 구조
 
-### GitHub Pages 배포
-1. `github-pages-index.html`을 `index.html`로 복사
-2. GitHub 저장소에 푸시
-3. Pages 설정에서 `main` 브랜치 선택
-4. 배포 후 우측 하단 톱니바퀴로 서버 URL 설정
+### 📱 메인 페이지 (`index.html`)
+- "CCQE AX Platform" 브랜딩
+- 8개 에이전트 카드 (각각 다른 테마)
+- 부드러운 애니메이션 및 호버 효과
 
-### 네트워크 접근
-1. **Windows 방화벽**: 포트 8080 허용 규칙 추가
-2. **내부 IP 확인**: `ipconfig` 명령어
-3. **외부 접근**: 라우터 포트 포워딩 설정
+### 🤖 8개 독립 에이전트 시스템
+| 에이전트 | 테마 | 접속 URL | 비밀번호 |
+|---------|------|----------|----------|
+| Agent 1 | AI 어시스턴트 | `/1.html` | `agent1123` |
+| Agent 2 | 지식 관리 | `/2.html` | `agent2123` |
+| Agent 3 | 크리에이티브 | `/3.html` | `agent3123` |
+| Agent 4 | 아이디어 생성 | `/4.html` | `agent4123` |
+| Agent 5 | 프로젝트 관리 | `/5.html` | `agent5123` |
+| Agent 6 | 분석 리포트 | `/6.html` | `agent6123` |
+| Agent 7 | 보안 관리 | `/7.html` | `agent7123` |
+| Agent 8 | 시스템 모니터링 | `/8.html` | `agent8123` |
 
-## 📋 다음 단계 추천
+## 🎯 현재 구현된 기능
 
-### 즉시 가능한 개선사항
-1. **GitHub Pages 배포 테스트**
-   - `github-pages-index.html` → `index.html` 복사
-   - 실제 GitHub Pages에서 동작 확인
-   
-2. **네트워크 접근 테스트**
-   - 방화벽 설정 후 다른 기기에서 접근 테스트
-   - 모바일에서 PC 서버 접근 확인
+### ✅ 완료된 기능
+1. **메인 대시보드** - CCQE AX Platform 홈페이지
+2. **8개 독립 에이전트 페이지** - 각각 고유한 테마와 예시 콘텐츠
+3. **독립적인 로그인 시스템** - 에이전트별 개별 인증
+4. **세션 기반 보안** - 쿠키 기반 24시간 세션 관리
+5. **대시보드 관리** - 버튼/링크/모달 추가/삭제 기능
+6. **데이터 격리** - 에이전트별 독립적인 데이터 저장
+7. **RESTful API** - 완전한 CRUD 연산 지원
+8. **반응형 디자인** - 모바일/태블릿/데스크톱 지원
 
-3. **Typebot 연동 테스트**
-   - 실제 Typebot ID로 에이전트 추가
-   - 팝업 기능 동작 확인
+### 🎨 UI/UX 특징
+- **글래스모피즘 디자인** - 현대적인 반투명 효과
+- **그라데이션 테마** - 각 에이전트별 고유한 색상
+- **애니메이션 효과** - 부드러운 전환 및 호버 효과
+- **FontAwesome 아이콘** - 직관적인 아이콘 시스템
+- **TailwindCSS** - 유틸리티 퍼스트 CSS 프레임워크
 
-### 향후 확장 가능사항
-1. **보안 강화**: 환경변수 기반 비밀번호
-2. **데이터베이스 연동**: SQLite 또는 외부 DB
-3. **사용자 시스템**: 다중 사용자 지원
-4. **테마 시스템**: 커스텀 색상/아이콘 팔레트
-5. **백업 기능**: 버튼 데이터 내보내기/가져오기
+## 🔐 보안 및 인증
 
-## 🔧 기술 스택
-- **백엔드**: Node.js Express 서버
-- **프론트엔드**: Vanilla JavaScript + Tailwind CSS
-- **데이터**: JSON 파일 기반 저장소
-- **인증**: 세션 쿠키 기반
-- **배포**: GitHub Pages + 로컬 PC 서버
-- **호환성**: ARM64 Windows 완전 지원
+### 인증 시스템
+- **개별 비밀번호**: 각 에이전트마다 고유한 비밀번호
+- **세션 관리**: 쿠키 기반 24시간 자동 만료
+- **데이터 격리**: 에이전트간 완전한 데이터 분리
+- **접근 제어**: 미들웨어를 통한 엄격한 권한 검증
 
-## 🏆 성과 요약
-- ✅ ARM64 Windows 호환성 문제 해결
-- ✅ 3가지 버튼 타입 완전 구현  
-- ✅ 실시간 동기화 시스템 구축
-- ✅ GitHub Pages 통합 완료
-- ✅ GenSpark UI/UX 스타일 재현
-- ✅ 비밀번호 보호 관리 시스템
-- ✅ CORS 문제 완전 해결
+### 데이터 저장
+- **JSON 파일**: 에이전트별 독립적인 데이터 파일
+- **실시간 동기화**: 변경사항 즉시 반영
+- **백업 안전성**: 파일 시스템 기반 안정성
 
-**마지막 업데이트**: 2025-09-21
+## 🛠️ 기술 스택
+
+### Backend
+- **Node.js** - 서버 런타임 환경
+- **Express.js** - 웹 프레임워크
+- **UUID** - 고유 식별자 생성
+- **파일 시스템** - JSON 기반 데이터 저장
+
+### Frontend
+- **HTML5** - 구조화된 마크업
+- **TailwindCSS** - 유틸리티 CSS 프레임워크
+- **FontAwesome** - 아이콘 라이브러리
+- **바닐라 JavaScript** - 클라이언트 사이드 로직
+
+### 인증 & 보안
+- **세션 기반 인증** - 쿠키를 통한 상태 관리
+- **미들웨어 보안** - Express 미들웨어를 통한 접근 제어
+- **CORS 설정** - 크로스 오리진 요청 보안
+
+## 📋 사용자 가이드
+
+### 🚀 시작하기
+1. 메인 페이지에서 원하는 에이전트 선택
+2. 에이전트 페이지에서 예시 기능 체험
+3. 톱니바퀴 아이콘 클릭하여 관리 모드 진입
+4. 해당 에이전트 비밀번호로 로그인
+5. 대시보드에서 버튼/링크/모달 관리
+
+### 🎛️ 관리자 기능
+- **버튼 추가**: 링크 또는 모달 형태의 새 버튼 생성
+- **콘텐츠 편집**: 기존 버튼의 내용 및 스타일 수정
+- **항목 삭제**: 불필요한 버튼 즉시 제거
+- **실시간 미리보기**: 변경사항 즉시 반영 및 확인
+
+### 📊 각 에이전트 예시 콘텐츠
+- **Agent 1**: OpenAI 링크 + AI 가이드 모달
+- **Agent 2**: Notion 링크 + 지식 관리 가이드 모달
+- **Agent 3**: Figma 링크 + 디자인 가이드 모달
+- **Agent 4**: 브레인스토밍 링크 + 아이디어 생성 가이드 모달
+- **Agent 5**: Asana 링크 + 프로젝트 관리 가이드 모달
+- **Agent 6**: Tableau 링크 + 데이터 분석 가이드 모달
+- **Agent 7**: 보안 체크리스트 링크 + 보안 가이드 모달
+- **Agent 8**: 시스템 상태 링크 + 모니터링 가이드 모달
+
+## 📈 배포 현황
+- **플랫폼**: Express.js 서버
+- **상태**: ✅ 활성화
+- **포트**: 8080
+- **환경**: 개발/프로덕션 겸용
+- **마지막 업데이트**: 2025년 9월 21일
+
+## 🔧 로컬 설치 방법
+
+### 요구사항
+- Node.js 16.0 이상
+- npm 또는 yarn 패키지 매니저
+
+### 설치 단계
+```bash
+# 1. 저장소 클론
+git clone https://github.com/namuira/aitf.git
+cd aitf
+
+# 2. 의존성 설치
+npm install
+
+# 3. 서버 시작
+node server.js
+
+# 4. 브라우저에서 접속
+# http://localhost:8080
+```
+
+### 🗂️ 폴더 구조
+```
+ccqe-ax-platform/
+├── public/
+│   ├── index.html          # 메인 페이지
+│   ├── 1.html ~ 8.html     # 8개 에이전트 페이지
+├── data/
+│   ├── agent1_buttons.json # Agent 1 데이터
+│   └── ... (agent2-8)      # 각 에이전트별 데이터
+├── server.js               # 메인 서버 파일
+├── package.json            # 프로젝트 의존성
+└── README.md              # 이 파일
+```
+
+## 🚀 다음 개발 계획
+- [ ] 데이터베이스 연동 (MongoDB/PostgreSQL)
+- [ ] 실시간 채팅 기능 추가
+- [ ] AI 응답 시스템 통합
+- [ ] 사용자 권한 시스템 확장
+- [ ] 다국어 지원 (영어/일본어)
+- [ ] 모바일 앱 버전 개발
+- [ ] 클라우드 배포 (AWS/Azure)
+
+## 📞 지원 및 문의
+이 프로젝트는 완전한 오픈소스이며, GitHub Issues를 통해 버그 리포트나 기능 제안을 받고 있습니다.
+
+---
+
+**개발 완료일**: 2025년 9월 21일  
+**버전**: 1.0.0  
+**라이선스**: MIT License
